@@ -1,0 +1,54 @@
+USE RPG;
+GO
+-- Tabela de usuários
+CREATE TABLE USUARIOS (
+    UsuarioId INT IDENTITY(1,1) PRIMARY KEY,
+    Email VARCHAR(255) NOT NULL,
+    Senha VARCHAR(255) NOT NULL
+);
+
+-- Tabela de classes
+CREATE TABLE CLASSES (
+    ClasseId INT IDENTITY(1,1) PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    Descricao VARCHAR(500)
+);
+
+-- Tabela de habilidades
+CREATE TABLE HABILIDADES (
+    HabilidadeId INT IDENTITY(1,1) PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL
+);
+
+-- Tabela de personagens
+CREATE TABLE PERSONAGENS (
+    PersonagemId INT IDENTITY(1,1) PRIMARY KEY,
+    NomePersonagem VARCHAR(100) NOT NULL,
+    UsuarioId INT NOT NULL,
+    ClasseId INT NOT NULL,
+
+    CONSTRAINT FK_PERSONAGENS_USUARIOS
+        FOREIGN KEY (UsuarioId)
+        REFERENCES USUARIOS(UsuarioId),
+
+    CONSTRAINT FK_PERSONAGENS_CLASSES
+        FOREIGN KEY (ClasseId)
+        REFERENCES CLASSES(ClasseId)
+);
+
+-- Tabela associativa
+CREATE TABLE CLASSES_HABILIDADES (
+    ClasseId INT NOT NULL,
+    HabilidadeId INT NOT NULL,
+
+    CONSTRAINT PK_CLASSES_HABILIDADES
+        PRIMARY KEY (ClasseId, HabilidadeId),
+
+    CONSTRAINT FK_CH_CLASSES
+        FOREIGN KEY (ClasseId)
+        REFERENCES CLASSES(ClasseId),
+
+    CONSTRAINT FK_CH_HABILIDADES
+        FOREIGN KEY (HabilidadeId)
+        REFERENCES HABILIDADES(HabilidadeId)
+);
